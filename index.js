@@ -23,12 +23,12 @@
 
   var cubeColors = [
     [],
-    [1.0, 1.0, 1.0], 
-    [0.5, 0.5, 0.5], 
-    [0.3, 0.3, 0.3], 
-    [0.3, 0.3, 0.3], 
-    [0.4, 0.4, 0.4], 
-    [0.3, 0.3, 0.3], 
+    [100/255, 100/255, 100/255], 
+    [100/255, 100/255, 100/255], 
+    [100/255, 100/255, 100/255], 
+    [100/255, 100/255, 100/255], 
+    [100/255, 100/255, 100/255], 
+    [100/255, 100/255, 100/255], 
     []
   ];
 
@@ -309,7 +309,7 @@
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, n2);
 
     //Clear Color
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(255/255, 221/255, 209/255, 1.0);
     gl.enable(gl.DEPTH_TEST);
     render();
   }
@@ -357,12 +357,12 @@
 
     if (translateY >= 0.9 - 0.4) animationY = -1.0;
     else if (translateY <= -0.9 + 0.1) animationY = 1.0;
-    translateY += 0.01 * animationY;
+    translateY += 0.011 * animationY;
     gl.uniform1f(translateYUniformLocation, translateY);
 
     if (translateZ >= 0.9) animationZ = -1.0;
     else if (translateZ <= -0.9) animationZ = 1.0;
-    translateZ += 0.01 * animationZ;
+    translateZ += 0.013 * animationZ;
     gl.uniform1f(translateZUniformLocation, translateZ);
 
     //Switch Mode
