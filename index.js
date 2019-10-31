@@ -4,30 +4,31 @@
   thetaUniformLocation, theta, thetaSpeed, axis, x, y, z, n1, n2,
   mmLoc, mm, vmLoc, vm, pmLoc, pm, camera, nmLoc,
   flagUniformLocation, flag, scaleXUniformLocation, scaleYUniformLocation, scaleX, scaleY,
-  translateX, translateXUniformLocation, translateY, translateYUniformLocation, translateZ, translateZUniformLocation;
+  translateX, translateXUniformLocation, translateY, translateYUniformLocation, translateZ, translateZUniformLocation,
+  animationX, animationY, animationZ;
 
   // Vertex Cube
   var vertices = [];
 
   var cubePoints = [
-    [ -0.85, -0.85,  0.85 ],
-    [ -0.85,  0.85,  0.85 ],
-    [  0.85,  0.85,  0.85 ],
-    [  0.85, -0.85,  0.85 ],
-    [ -0.85, -0.85, -0.85 ],
-    [ -0.85,  0.85, -0.85 ],
-    [  0.85,  0.85, -0.85 ],
-    [  0.85, -0.85, -0.85 ]
+    [ -0.9, -0.9,  0.9 ],
+    [ -0.9,  0.9,  0.9 ],
+    [  0.9,  0.9,  0.9 ],
+    [  0.9, -0.9,  0.9 ],
+    [ -0.9, -0.9, -0.9 ],
+    [ -0.9,  0.9, -0.9 ],
+    [  0.9,  0.9, -0.9 ],
+    [  0.9, -0.9, -0.9 ]
   ];
 
   var cubeColors = [
     [],
     [1.0, 1.0, 1.0], 
+    [0.5, 0.5, 0.5], 
     [0.3, 0.3, 0.3], 
-    [0.3, 3.0, 0.3], 
-    [0.2, 0.2, 0.2], 
-    [0.2, 0.2, 0.2], 
-    [0.2, 0.2, 0.2], 
+    [0.3, 0.3, 0.3], 
+    [0.4, 0.4, 0.4], 
+    [0.3, 0.3, 0.3], 
     []
   ];
 
@@ -46,13 +47,13 @@
   var vertices5 = [],
   vertices6 = [
     
-  -0.05, -0.1, 0.0, 1.0, 1.0, 1.0, 
-  -0.05, 0.4, 0.0, 1.0, 1.0, 1.0,
-  0.01, -0.1, 0.0, 1.0, 1.0, 1.0,
-  0.0, 0.4, 0.0, 1.0, 1.0, 1.0,
-  0.01, 0.3, 0.0, 1.0, 1.0, 1.0,
-  0.01, 0.4, 0.0, 1.0, 1.0, 1.0,
-  0.0, 0.35, 0.0, 1.0, 1.0, 1.0
+  -0.07, -0.1, 0.0, 1.0, 1.0, 1.0, 
+  -0.07, 0.4, 0.0, 1.0, 1.0, 1.0,
+  -0.13, -0.1, 0.0, 1.0, 1.0, 1.0,
+  -0.07, 0.4, 0.0, 1.0, 1.0, 1.0,
+  -0.13, 0.3, 0.0, 1.0, 1.0, 1.0,
+  -0.13, 0.4, 0.0, 1.0, 1.0, 1.0,
+  -0.07, 0.35, 0.0, 1.0, 1.0, 1.0
   
   ];
 
@@ -203,16 +204,6 @@
     
     }
 
-    // var vert3 = [
-    //   0.0, 0.0, 0.0, 0.0, 0.0,
-    //   0.0, 0.125, 0.0, 0.0, 0.0,
-    //   0.0, 0.125, 0.0, 0.0, 0.0,
-    //   0.0, 0.0, 0.0, 0.0, 0.0,
-    //   0.0, 0.0, 0.0, 0.0, 0.0
-    // ]
-
-    // vertices = vertices.concat(vert3);
-
     var ntotal = vertices.length / 6;
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
@@ -291,27 +282,26 @@
     scaleY = 1.0; 
     gl.uniform1f(scaleYUniformLocation, scaleY);
 
-    //Set translate
-    // translateXUniformLocation = gl.getUniformLocation(program, 'translateX');
-    // translateX = 0.0; 
-    // gl.uniform1f(translateXUniformLocation, translateX);
+    // Set translate
+    translateXUniformLocation = gl.getUniformLocation(program, 'translateX');
+    translateX = 0.0; 
+    gl.uniform1f(translateXUniformLocation, translateX);
 
-    // translateYUniformLocation = gl.getUniformLocation(program, 'translateY');
-    // translateY = 0.0; 
-    // gl.uniform1f(translateYUniformLocation, translateY);
+    translateYUniformLocation = gl.getUniformLocation(program, 'translateY');
+    translateY = 0.0; 
+    gl.uniform1f(translateYUniformLocation, translateY);
 
-    // translateZUniformLocation = gl.getUniformLocation(program, 'translateZ');
-    // translateZ = 0.0; 
-    // gl.uniform1f(translateZUniformLocation, translateZ);
+    translateZUniformLocation = gl.getUniformLocation(program, 'translateZ');
+    translateZ = 0.0; 
+    gl.uniform1f(translateZUniformLocation, translateZ);
 
+    //Set variable animasi
     span = 1.0;
+    animationX = 1.0;
+    animationY = 1.0;
+    animationZ = 1.0;
 
     flagUniformLocation = gl.getUniformLocation(program, 'flag');
-
-    //Set flag ke kubus
-    // flag = 0.0;
-    // gl.uniform1f(flagUniformLocation, flag);
-    // gl.drawArrays(gl.TRIANGLES, 0, 36);
 
     //Set flag ke P
     flag = 1.0;
@@ -352,16 +342,30 @@
     gl.drawArrays(gl.LINE_STRIP, 0, n1);
 
     //P
+    
+    //Animasi Rotasi
     if (scaleX >= 1.0) span = -1.0;
     else if (scaleX <= -1.0) span = 1.0;
-    scaleX += 0.01 * span;
+    scaleX += 0.041 * span;
     gl.uniform1f(scaleXUniformLocation, scaleX);
 
-    // if (translateX >= 0.5) translateX = -0.5;
-    // else if(translateX <= -0.5) translateX = 0.5;
-    // translateX += 0.01 * translateX
-    // gl.uniform1f(translateXUniformLocation, translateX);
+    //Animasi Translasi
+    if (translateX >= 0.9 - Math.abs(scaleX * 0.07)) animationX = -1.0;
+    else if (translateX <= -0.9 + Math.abs(scaleX * 0.07)) animationX = 1.0;
+    translateX += 0.015 * animationX;
+    gl.uniform1f(translateXUniformLocation, translateX);
 
+    if (translateY >= 0.9 - 0.4) animationY = -1.0;
+    else if (translateY <= -0.9 + 0.1) animationY = 1.0;
+    translateY += 0.01 * animationY;
+    gl.uniform1f(translateYUniformLocation, translateY);
+
+    if (translateZ >= 0.9) animationZ = -1.0;
+    else if (translateZ <= -0.9) animationZ = 1.0;
+    translateZ += 0.01 * animationZ;
+    gl.uniform1f(translateZUniformLocation, translateZ);
+
+    //Switch Mode
     flag = 1.0;
     gl.uniform1f(flagUniformLocation, flag);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, n2);
@@ -397,13 +401,13 @@
 
     quadline(1, 0, 3, 2); // Depan
     quadline(2, 3, 7, 6); // Kanan
-    quadline(6, 2, 1, 5); // Atas
-    quadline(5, 1, 0, 4); // Kiri
-    quadline(4, 0, 3, 7); // Bawah
-    quadline(7, 4, 5, 6); // Belakang
+    quadline(6, 5, 1, 2); // Atas
+    quadline(5, 4, 0, 1); // Kiri
+    quadline(4, 7, 3, 0); // Bawah
+    quadline(4, 5, 6, 7); // Belakang
 
     n1 = initBuffers(gl,vertices);
-    n2 = initBuffers2(gl, vertices5, vertices6, 0.15, 0.00, 0.25);
+    n2 = initBuffers2(gl, vertices5, vertices6, 0.15, -0.07, 0.25);
 
     draw();
   }
