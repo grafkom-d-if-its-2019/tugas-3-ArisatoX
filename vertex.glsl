@@ -27,13 +27,13 @@ uniform float flag;
 
 void main() 
 {
-  // vec3 translateP = vec3(0.0, 0.0, 0.0);
+  vec3 translateP = vec3(0.0, 0.0, 0.0);
 
   mat4 mTransformP = mat4(
     1.0, 0.0, 0.0, 0.0,
     0.0, 1.0, 0.0, 0.0,
     0.0, 0.0, 1.0, 0.0,
-    translateX, translateY, translateZ, 1.0
+    translateP, 1.0
   ); 
 
   mat4 mScale = mat4(
@@ -45,14 +45,14 @@ void main()
 
   if(flag == 0.0)
   {
-    // fColor = vColor;
+    fColor = vColor;
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vPosition, 1.0);
 
-    vec3 normal = normalize(normalMatrix * vNormal);
-    float normalDotLight = max(dot(normal, diffuseDirection), 0.0); 
-    vec3 diffuse = diffuseColor * vColor * normalDotLight;
-    vec3 ambient = ambientColor * vColor;
-    fColor = diffuse + ambient;
+    // vec3 normal = normalize(normalMatrix * vNormal);
+    // float normalDotLight = max(dot(normal, diffuseDirection), 0.0); 
+    // vec3 diffuse = diffuseColor * vColor * normalDotLight;
+    // vec3 ambient = ambientColor * vColor;
+    // fColor = diffuse + ambient;
   }
   else if(flag == 1.0)
   {

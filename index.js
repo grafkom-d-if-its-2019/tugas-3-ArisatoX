@@ -1,7 +1,7 @@
 (function() {
 
   var canvas, gl, vertexShader, fragmentShader, program,
-  thetaUniformLocation, theta, thetaSpeed, axis, x, y, z, n2,
+  thetaUniformLocation, theta, thetaSpeed, axis, x, y, z, n1, n2,
   mmLoc, mm, vmLoc, vm, pmLoc, pm, camera, nmLoc,
   flagUniformLocation, flag, scaleXUniformLocation, scaleYUniformLocation, scaleX, scaleY,
   translateX, translateXUniformLocation, translateY, translateYUniformLocation, translateZ, translateZUniformLocation;
@@ -22,12 +22,12 @@
 
   var cubeColors = [
     [],
-    [1.0, 0.0, 0.0], // merah
-    [0.0, 1.0, 0.0], // hijau
-    [0.0, 0.0, 1.0], // biru
-    [1.0, 1.0, 1.0], // putih
-    [1.0, 0.5, 0.0], // oranye
-    [1.0, 1.0, 0.0], // kuning
+    [1.0, 1.0, 1.0], 
+    [0.3, 0.3, 0.3], 
+    [0.3, 3.0, 0.3], 
+    [0.2, 0.2, 0.2], 
+    [0.2, 0.2, 0.2], 
+    [0.2, 0.2, 0.2], 
     []
   ];
 
@@ -46,13 +46,13 @@
   var vertices5 = [],
   vertices6 = [
     
-  0.035, -0.1, 0.0, 0.0, 0.0, 
-  0.035, 0.4, 0.0, 0.0, 0.0,
-  0.1, -0.1, 0.0, 0.0, 0.0,
-  0.08, 0.4, 0.0, 0.0, 0.0,
-  0.1, 0.3, 0.0, 0.0, 0.0,
-  0.1, 0.4, 0.0, 0.0, 0.0,
-  0.08, 0.35, 0.0, 0.0, 0.0
+  -0.05, -0.1, 0.0, 1.0, 1.0, 1.0, 
+  -0.05, 0.4, 0.0, 1.0, 1.0, 1.0,
+  0.01, -0.1, 0.0, 1.0, 1.0, 1.0,
+  0.0, 0.4, 0.0, 1.0, 1.0, 1.0,
+  0.01, 0.3, 0.0, 1.0, 1.0, 1.0,
+  0.01, 0.4, 0.0, 1.0, 1.0, 1.0,
+  0.0, 0.35, 0.0, 1.0, 1.0, 1.0
   
   ];
 
@@ -77,7 +77,7 @@
   }
 
   function quadline(a, b, c, d) {
-    var indices = [a, b, c, a, c, d];
+    var indices = [a, b, c, d, a];
 
     for (var i=0; i < indices.length; i++) {
       
@@ -89,14 +89,11 @@
         vertices.push(cubeColors[a][j]);
       }
 
-      for (var j=0; j < 3; j++) {
-        vertices.push(cubeNormals[a][j]);
-      }
+      // for (var j=0; j < 3; j++) {
+      //   vertices.push(cubeNormals[a][j]);
+      // }
     }
   }
-
-
-
 
   // GL Size
   function initGlSize() {
@@ -142,15 +139,17 @@
      // Membuat sambungan untuk attribute
      var vPosition = gl.getAttribLocation(program, 'vPosition');
      var vColor = gl.getAttribLocation(program, 'vColor');
-     var vNormal = gl.getAttribLocation(program, 'vNormal');
- 
+    //  var vNormal = gl.getAttribLocation(program, 'vNormal');
+
+     ntotal = vertices.length / 6;
+    
      //Attrib Pointer
      gl.vertexAttribPointer(
        vPosition,    // variabel yang memegang posisi attribute di shader
        3,            // jumlah elemen per atribut
        gl.FLOAT,     // tipe data atribut
        gl.FALSE, 
-       9 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap verteks (overall) 
+       6 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap verteks (overall) 
        0                                   // offset dari posisi elemen di array
      );
  
@@ -159,22 +158,24 @@
        3, 
        gl.FLOAT, 
        gl.FALSE,
-       9 * Float32Array.BYTES_PER_ELEMENT, 
+       6 * Float32Array.BYTES_PER_ELEMENT, 
        3 * Float32Array.BYTES_PER_ELEMENT
        );
  
-     gl.vertexAttribPointer(
-       vNormal, 
-       3, 
-       gl.FLOAT, gl.FALSE,
-       9 * Float32Array.BYTES_PER_ELEMENT, 
-       6 * Float32Array.BYTES_PER_ELEMENT
-       );  
+    //  gl.vertexAttribPointer(
+    //    vNormal, 
+    //    3, 
+    //    gl.FLOAT, gl.FALSE,
+    //    9 * Float32Array.BYTES_PER_ELEMENT, 
+    //    6 * Float32Array.BYTES_PER_ELEMENT
+    //    );  
  
      //EnableVertexAttrib
      gl.enableVertexAttribArray(vPosition);
      gl.enableVertexAttribArray(vColor);
-     gl.enableVertexAttribArray(vNormal);
+    //  gl.enableVertexAttribArray(vNormal);
+
+     return ntotal;
   }
 
   //Init Buffer P
@@ -189,12 +190,12 @@
     var vert1 = [
       Math.sin(j) * x + y1,
       Math.cos(j) * x + y2,
-      0.0, 0.0, 0.0
+      0.0, 1.0, 1.0, 1.0
     ];
     var vert2 = [
       Math.sin(j) * 0.5 * x + y1,
       Math.cos(j) * 0.5 * x + y2,
-      0.0, 0.0, 0.0
+      0.0, 1.0, 1.0, 1.0
     ];
     
     vertices = vertices.concat(vert1);
@@ -212,7 +213,7 @@
 
     // vertices = vertices.concat(vert3);
 
-    var ntotal = vertices.length / 5;
+    var ntotal = vertices.length / 6;
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
@@ -221,15 +222,15 @@
 
     gl.vertexAttribPointer(
       vPositionP,  // variabel yang memegang posisi attribute di shader
-      2,          // jumlah elemen per attribute
+      3,          // jumlah elemen per attribute
       gl.FLOAT,   // tipe data attribute
       gl.FALSE,   
-      5 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap vertex (overall)
+      6 * Float32Array.BYTES_PER_ELEMENT, // ukuran byte tiap vertex (overall)
       0                                   // offset dari posisi elemen di array
     );
 
     gl.vertexAttribPointer( vColorP, 3, gl.FLOAT, gl.FALSE, 
-      5 * Float32Array.BYTES_PER_ELEMENT, 2 * Float32Array.BYTES_PER_ELEMENT);
+      6 * Float32Array.BYTES_PER_ELEMENT, 3 * Float32Array.BYTES_PER_ELEMENT);
 
     gl.enableVertexAttribArray(vPositionP);
     gl.enableVertexAttribArray(vColorP);
@@ -347,7 +348,8 @@
 
     flag = 0.0;
     gl.uniform1f(flagUniformLocation, flag);
-    gl.drawArrays(gl.TRIANGLES, 0, 36);
+    // gl.drawArrays(gl.TRIANGLES, 0, 36);
+    gl.drawArrays(gl.LINE_STRIP, 0, n1);
 
     //P
     if (scaleX >= 1.0) span = -1.0;
@@ -386,15 +388,22 @@
     program = glUtils.createProgram(gl, vertexShader, fragmentShader);
     gl.useProgram(program);
 
-    quad(1, 0, 3, 2);
-    quad(2, 3, 7, 6);
-    quad(3, 0, 4, 7);
-    quad(4, 5, 6, 7);
-    quad(5, 4, 0, 1);
-    quad(6, 5, 1, 2);
+    // quad(1, 0, 3, 2);
+    // quad(2, 3, 7, 6);
+    // quad(3, 0, 4, 7);
+    // quad(4, 5, 6, 7);
+    // quad(5, 4, 0, 1);
+    // quad(6, 5, 1, 2);
 
-    initBuffers(gl,vertices);
-    n2 = initBuffers2(gl, vertices5, vertices6, 0.15, 0.1, 0.25);
+    quadline(1, 0, 3, 2); // Depan
+    quadline(2, 3, 7, 6); // Kanan
+    quadline(6, 2, 1, 5); // Atas
+    quadline(5, 1, 0, 4); // Kiri
+    quadline(4, 0, 3, 7); // Bawah
+    quadline(7, 4, 5, 6); // Belakang
+
+    n1 = initBuffers(gl,vertices);
+    n2 = initBuffers2(gl, vertices5, vertices6, 0.15, 0.00, 0.25);
 
     draw();
   }
