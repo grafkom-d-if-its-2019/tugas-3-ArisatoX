@@ -76,6 +76,28 @@
     }
   }
 
+  function quadline(a, b, c, d) {
+    var indices = [a, b, c, a, c, d];
+
+    for (var i=0; i < indices.length; i++) {
+      
+      for (var j=0; j < 3; j++) {
+        vertices.push(cubePoints[indices[i]][j]);
+      }
+
+      for (var j=0; j < 3; j++) {
+        vertices.push(cubeColors[a][j]);
+      }
+
+      for (var j=0; j < 3; j++) {
+        vertices.push(cubeNormals[a][j]);
+      }
+    }
+  }
+
+
+
+
   // GL Size
   function initGlSize() {
     var width = canvas.getAttribute("width"), height = canvas.getAttribute("height");
